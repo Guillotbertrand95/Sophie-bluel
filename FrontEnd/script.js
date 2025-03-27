@@ -22,7 +22,7 @@ fetch(apiUrl)
 		galleryContainer.innerHTML = "";
 		filterContainer.innerHTML = "";
 
-		// 📌 1. EXTRAIRE LES CATÉGORIES UNIQUES AVEC SET
+		//  EXTRAIRE LES CATÉGORIES UNIQUES AVEC SET
 		const categoryIds = new Set(data.map((work) => work.category.id)); // Un set des IDs uniques
 		const categories = [{ id: "all", name: "Tous" }];
 
@@ -34,7 +34,7 @@ fetch(apiUrl)
 			categories.push(category);
 		});
 
-		// 📌 2. CRÉER LES BOUTONS DE FILTRE
+		//  CRÉER LES BOUTONS DE FILTRE
 		categories.forEach((category) => {
 			const button = document.createElement("button");
 			button.textContent = category.name;
@@ -56,7 +56,7 @@ fetch(apiUrl)
 			filterContainer.appendChild(button);
 		});
 
-		// 📌 4. FONCTION POUR AFFICHER LES PROJETS
+		//  FONCTION POUR AFFICHER LES PROJETS
 		function displayWorks(works) {
 			galleryContainer.innerHTML = ""; // Nettoyage
 
@@ -77,6 +77,6 @@ fetch(apiUrl)
 			});
 		}
 
-		// 📌 5. AFFICHER TOUS LES PROJETS AU CHARGEMENT
+		//  AFFICHER TOUS LES PROJETS AU CHARGEMENT
 		displayWorks(data);
 	});
