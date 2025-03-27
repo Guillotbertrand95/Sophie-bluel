@@ -26,8 +26,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 				galleryContainer.appendChild(projectElement);
 			});
-		})
-		.catch((error) => {
-			console.error("Erreur:", error);
 		});
 });
