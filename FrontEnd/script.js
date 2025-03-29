@@ -64,15 +64,15 @@ fetch(apiUrl)
 				const workElement = document.createElement("div");
 				workElement.classList.add("work");
 
-				const workTitle = document.createElement("h3");
-				workTitle.textContent = work.title;
-
 				const workImage = document.createElement("img");
 				workImage.src = work.imageUrl;
 				workImage.alt = work.title;
 
-				workElement.appendChild(workTitle);
+				const workTitle = document.createElement("h3");
+				workTitle.textContent = work.title;
+
 				workElement.appendChild(workImage);
+				workElement.appendChild(workTitle);
 				galleryContainer.appendChild(workElement);
 			});
 		}
