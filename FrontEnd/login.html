@@ -13,6 +13,7 @@
 		<meta name="description" content="" />
 		<link rel="stylesheet" href="./assets/style.css" />
 		<script src="script.js" defer></script>
+		<script src="login.js" defer></script>
 	</head>
 </html>
 <body>
@@ -22,13 +23,35 @@
 			<ul>
 				<li>projets</li>
 				<li>contact</li>
-				<li>login</li>
+				<li><a href="login.html">Login</a></li>
 				<li>
 					<img src="./assets/icons/instagram.png" alt="Instagram" />
 				</li>
 			</ul>
 		</nav>
 	</header>
-	<main></main>
+	<main>
+		<section class="login-container">
+			<h2>Log In</h2>
+			<form id="login-form">
+				<div class="form-container">
+					<label for="email">e-mail</label>
+					<input type="text" id="email" name="email" required>
+			
+						<label for="password">mot de passe</label>
+						<input type="text" id="password" name="mot de passe" required>
+				
+					<input type="submit" value="Se connecter" />
+						<label for="password-forget">Mot de passe oublié </label>		
+				</div>
+	
+			</form>
+
+		</section>
+		
+	
+	</main>
+
+	</main>
 	<footer></footer>
 </body>
