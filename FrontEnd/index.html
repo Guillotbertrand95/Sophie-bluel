@@ -18,9 +18,9 @@
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
-					<li>projets</li>
-					<li>contact</li>
-					<li><a href="login.html">Login</a></li>
+					<li><a href="index.html">projets</a></li>
+					<li><a href="index.html">contact</a></li>
+					<li><a href="login.html" id="login-button">Login</a></li>
 					<li>
 						<img
 							src="./assets/icons/instagram.png"
@@ -60,12 +60,13 @@
 			<section id="portfolio">
 				<div id="projets-container">
 					<h2>Mes Projets</h2>
+					<div id="admin-menu" style="display: none">
+						<button id="add-project">Ajouter un projet</button>
+					</div>
 					<div class="filters"></div>
 					<div class="gallery"></div>
 					<div id="modal-container" class="modal">
-						<div class="modal-content">
-							<!-- Le contenu de la modale sera ajouté ici par JavaScript -->
-						</div>
+						<div class="modal-content"></div>
 					</div>
 				</div>
 			</section>
@@ -97,6 +98,7 @@
 			</nav>
 		</footer>
 		<script src="login.js" defer></script>
-		<script src="script.js"></script>
+
+		<script src="script.js" defer></script>
 	</body>
 </html>

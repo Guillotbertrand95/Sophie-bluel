@@ -42,7 +42,7 @@ fetch(apiUrl)
 			button.classList.add("filter-button");
 
 			button.addEventListener("click", () => {
-				// 📌 3. FILTRER LES PROJETS AU CLIC
+				//   FILTRER LES PROJETS AU CLIC
 				const filteredWorks =
 					category.id === "all"
 						? data
@@ -80,3 +80,49 @@ fetch(apiUrl)
 		//  AFFICHER TOUS LES PROJETS AU CHARGEMENT
 		displayWorks(data);
 	});
+
+// Fonction pour ajouter le bandeau "mode édition"
+function ajouterBandeau() {
+	if (!document.querySelector("#bandeau-connexion")) {
+		const bandeau = document.createElement("div");
+		bandeau.id = "bandeau-connexion";
+		bandeau.textContent = "Mode édition";
+		bandeau.classList.add("bandeau-connecte"); // Ajouter la classe CSS
+		document.body.prepend(bandeau); // Ajouter au début du body
+		console.log("Bandeau ajouté !");
+	}
+}
+
+// Fonction pour modifier le bouton Login en Logout
+function modifierBoutonLogin() {
+	const loginButton = document.querySelector("#login-button"); // Sélectionne le bouton Login
+	if (loginButton) {
+		loginButton.textContent = "Logout"; // Change le texte du bouton
+		loginButton.addEventListener("click", () => {
+			localStorage.removeItem("token"); // Supprimer le token du localStorage
+			window.location.href = "login.html"; // Rediriger vers la page de login
+		});
+	}
+}
+
+// Fonction pour supprimer le bandeau "mode édition" si l'utilisateur n'est pas connecté
+function supprimerBandeau() {
+	const bandeau = document.querySelector("#bandeau-connexion");
+	if (bandeau) {
+		bandeau.remove();
+	}
+}
+
+// Code exécuté au chargement de la page
+document.addEventListener("DOMContentLoaded", () => {
+	const token = localStorage.getItem("token"); // Vérification du token dans le localStorage
+
+	// Si le token existe, l'utilisateur est connecté
+	if (token) {
+		ajouterBandeau(); // Ajouter le bandeau "mode édition"
+		modifierBoutonLogin(); // Modifier le bouton Login en Logout
+	} else {
+		supprimerBandeau(); // Si l'utilisateur n'est pas connecté, on supprime le bandeau
+		console.log("Pas de token, utilisateur non connecté");
+	}
+});
