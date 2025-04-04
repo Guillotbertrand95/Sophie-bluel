@@ -18,10 +18,6 @@ fetch(apiUrl)
 			);
 		}
 
-		// Nettoyage des conteneurs avant d'ajouter les nouveaux éléments
-		galleryContainer.innerHTML = "";
-		filterContainer.innerHTML = "";
-
 		//  EXTRAIRE LES CATÉGORIES UNIQUES AVEC SET
 		const categoryIds = new Set(data.map((work) => work.category.id)); // Un set des IDs uniques
 		const categories = [{ id: "all", name: "Tous" }];
@@ -81,14 +77,34 @@ fetch(apiUrl)
 		displayWorks(data);
 	});
 
-// Fonction pour ajouter le bandeau "mode édition"
+function cacherFiltres() {
+	const filterContainer = document.querySelector(".filters");
+	if (filterContainer) {
+		filterContainer.style.display = "none"; // Masquer les filtres
+	}
+}
+
 function ajouterBandeau() {
 	if (!document.querySelector("#bandeau-connexion")) {
+		// Création du bandeau
 		const bandeau = document.createElement("div");
 		bandeau.id = "bandeau-connexion";
-		bandeau.textContent = "Mode édition";
 		bandeau.classList.add("bandeau-connecte"); // Ajouter la classe CSS
-		document.body.prepend(bandeau); // Ajouter au début du body
+
+		// Création de l'icône
+		const icon = document.createElement("i");
+		icon.classList.add("fa-regular", "fa-pen-to-square");
+
+		// Création du texte
+		const texte = document.createElement("span");
+		texte.textContent = "                      Mode édition ";
+
+		// Ajout du texte et de l'icône au bandeau
+		bandeau.appendChild(icon);
+		bandeau.appendChild(texte);
+
+		// Ajouter le bandeau au début du body
+		document.body.prepend(bandeau);
 		console.log("Bandeau ajouté !");
 	}
 }
@@ -113,6 +129,43 @@ function supprimerBandeau() {
 	}
 }
 
+function modifierBoutonModale() {
+	// Sélectionner le conteneur modal
+	const modalContainer = document.querySelector(".modal");
+
+	if (!modalContainer) {
+		console.error("L'élément .modal est introuvable !");
+		return;
+	}
+
+	// Vérifier si le bouton existe déjà pour éviter les doublons
+	if (document.querySelector("#edit-modal")) return;
+
+	// Création du bouton
+	const modalButton = document.createElement("div");
+	modalButton.id = "edit-modal";
+
+	// Création de l'icône
+	const icon = document.createElement("i");
+	icon.classList.add("fa-regular", "fa-pen-to-square");
+
+	// Création du texte
+	const texte = document.createElement("span");
+	texte.textContent = "          modifier";
+
+	// Ajout de l'icône et du texte au bouton
+	modalButton.appendChild(icon);
+	modalButton.appendChild(texte);
+
+	// Insérer le bouton dans .modal, juste après le titre
+	const titre = modalContainer.querySelector("h2");
+	if (titre) {
+		titre.insertAdjacentElement("afterend", modalButton);
+	} else {
+		console.error("Le titre h2 est introuvable dans .modal !");
+	}
+}
+
 // Code exécuté au chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
 	const token = localStorage.getItem("token"); // Vérification du token dans le localStorage
@@ -121,8 +174,66 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (token) {
 		ajouterBandeau(); // Ajouter le bandeau "mode édition"
 		modifierBoutonLogin(); // Modifier le bouton Login en Logout
+		cacherFiltres(); // 👈 Ajoute cette ligne pour cacher les filtres après connexion
+		modifierBoutonModale();
 	} else {
 		supprimerBandeau(); // Si l'utilisateur n'est pas connecté, on supprime le bandeau
 		console.log("Pas de token, utilisateur non connecté");
+	}
+});
+
+function ajouterEvenementModale() {
+	const modalButton = document.querySelector("#edit-modal");
+
+	if (!modalButton) return; // Sécurité si le bouton n'existe pas
+
+	modalButton.addEventListener("click", () => {
+		console.log("Bouton Modifier cliqué !");
+		ouvrirModale(); // Fonction qui affichera ta modale
+	});
+}
+
+function ouvrirModale() {
+	// Vérifier si la modale existe déjà
+	if (document.querySelector("#modal-projets")) return;
+
+	// Création de l'élément principal de la modale
+	const modal = document.createElement("div");
+	modal.id = "modal-projets";
+	modal.classList.add("modale");
+
+	// Contenu de la modale
+	modal.innerHTML = `
+        <div class="modale-contenu">
+            <span class="modale-fermer">&times;</span>
+            <h2>Gérer les projets</h2>
+            <div id="liste-projets">
+                <p>Chargement des projets...</p>
+            </div>
+        </div>
+    `;
+	// Ajout de la modale au body
+	document.body.appendChild(modal);
+
+	// Fermer la modale au clic sur la croix
+	document
+		.querySelector(".modale-fermer")
+		.addEventListener("click", fermerModale);
+	modalButton.addEventListener("click", ouvrirModale);
+}
+
+function fermerModale() {
+	const modal = document.querySelector("#modal-projets");
+	if (modal) {
+		modal.remove(); // Supprime la modale du DOM
+	}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+	const token = localStorage.getItem("token");
+
+	if (token) {
+		const boutonModale = modifierBoutonModale(); // Crée le bouton
+		ajouterEvenementModale(); // Ajoute l'événement au clic
 	}
 });

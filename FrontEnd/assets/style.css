@@ -84,7 +84,6 @@ time,
 mark,
 audio,
 video {
-	margin: 0;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
@@ -139,7 +138,7 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0;
+	margin: 70px 0;
 }
 
 .bandeau-connecte {
@@ -147,6 +146,7 @@ header {
 	top: 0;
 	left: 0;
 	width: 100%;
+	height: 35px;
 	background-color: black;
 	color: white;
 	text-align: center;
@@ -154,6 +154,14 @@ header {
 	font-weight: bold;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 	animation: fadeIn 0.5s ease-in-out;
+}
+
+.bandeau-connexion {
+	display: flex;
+	margin-top: 70px;
+	flex-direction: row;
+	align-items: center;
+	gap: 200px;
 }
 
 section {
@@ -293,9 +301,28 @@ label[for="password-forget"] {
 	background-color: #1d6154; /* Couleur de fond au survol */
 	color: white; /* Couleur du texte au survol */
 }
+/* Bouton pour ouvrir la modale (Modifier ou Logo) */
+#edit-modal {
+	display: inline-block;
+	padding: 10px 15px;
+
+	color: black;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background 0.3s ease;
+	text-align: center;
+}
+
+/* Effet au clic */
+.open-modal:active {
+	transform: scale(0.95);
+}
 
 .gallery {
-	width: 100%;
+	width: 80%;
+	margin-left: 90px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
@@ -351,4 +378,47 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em;
+}
+.modal {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	text-align: center;
+	gap: 20px;
+	margin-left: 480px;
+	margin-bottom: 80px;
+}
+/* Style du fond de la modale */
+.modale-contenu {
+	display: none; /* Cachée par défaut */
+	position: fixed;
+	background: white;
+	top: 0;
+	left: 0;
+	width: 30%;
+	height: 500px;
+	margin-left: 510px;
+	margin-top: 150px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Style de la boîte de la modale */
+.modal-content {
+	background: white;
+	padding: 20px;
+	border-radius: 10px;
+	width: 400px;
+	background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+	box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+	text-align: center;
+	position: relative;
+	animation: fadeIn 0.3s ease-in-out;
+}
+#modal-projets {
+	background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+	width: 90%;
+	height: auto;
 }
