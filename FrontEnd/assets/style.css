@@ -379,46 +379,126 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em;
 }
+h2 {
+	margin: 0;
+}
+
+/* Style pour l'overlay */
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #00000080; /* Fond semi-transparent */
+	z-index: 999; /* Assure que l'overlay soit au-dessus du contenu */
+}
 .modal {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	text-align: center;
-	gap: 20px;
-	margin-left: 480px;
-	margin-bottom: 80px;
+	margin-left: 450px;
+	margin-top: 100px;
+	margin-bottom: 100px;
 }
-/* Style du fond de la modale */
-.modale-contenu {
-	display: none; /* Cachée par défaut */
+/* Style pour la modale */
+.modale {
 	position: fixed;
-	background: white;
-	top: 0;
-	left: 0;
-	width: 30%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%); /* Centrer la modale */
+	width: 30%; /* Largeur de la modale */
 	height: 500px;
-	margin-left: 510px;
-	margin-top: 150px;
-
+	max-width: 600px; /* Largeur maximale de la modale */
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px; /* Coins arrondis */
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Ombre pour la modale */
+	z-index: 1000; /* Assure que la modale soit au-dessus de l'overlay */
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: center;
 }
 
-/* Style de la boîte de la modale */
-.modal-content {
-	background: white;
-	padding: 20px;
-	border-radius: 10px;
+/* Style pour le contenu de la modale */
+.modale-contenu {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+}
+
+/* Style pour la croix de fermeture */
+.modale-fermer {
+	font-size: 2rem;
+	font-weight: bold;
+	color: #333;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+/* Style pour le titre de la modale */
+.modale-contenu h2 {
+	font-family: syne;
+	margin: 0;
+	color: black;
+	text-align: center;
+}
+
+/* Style pour le conteneur de la liste des projets */
+#liste-projets {
+	margin-top: 20px;
 	width: 400px;
-	background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-	box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+	min-height: 300px; /* Hauteur minimale pour la zone des projets */
+	overflow: hidden;
+	padding: 10px;
+}
+
+/* Style pour le bouton "Ajouter une photo" */
+button {
+	width: 70%;
+	margin-left: 65px;
+
+	background-color: #1d6154;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+/* Style uniquement les images dans la modale */
+#modal-projets .work img {
+	width: 80%;
+	height: 80px;
+
+	object-fit: cover;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur des projets dans la modale */
+#modal-projets #liste-projets {
+	display: flex;
+	flex-wrap: wrap;
+
+	align-items: center;
+}
+
+/* Chaque projet dans la modale */
+#modal-projets .work {
+	width: 80px;
 	text-align: center;
 	position: relative;
-	animation: fadeIn 0.3s ease-in-out;
 }
-#modal-projets {
-	background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-	width: 90%;
-	height: auto;
+.delete-button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	color: red;
 }

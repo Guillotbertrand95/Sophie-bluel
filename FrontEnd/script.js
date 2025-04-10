@@ -189,43 +189,74 @@ function ajouterEvenementModale() {
 
 	modalButton.addEventListener("click", () => {
 		console.log("Bouton Modifier cliqué !");
-		ouvrirModale(); // Fonction qui affichera ta modale
+		contenuModale(); // Fonction qui affichera ta modale
 	});
 }
+function contenuModale() {
+	//vérifier si la modale existe déjà
+	if (document.querySelector("#modale-projets")) return;
 
-function ouvrirModale() {
-	// Vérifier si la modale existe déjà
-	if (document.querySelector("#modal-projets")) return;
-
-	// Création de l'élément principal de la modale
+	// création de l'éléments principal modale
 	const modal = document.createElement("div");
 	modal.id = "modal-projets";
 	modal.classList.add("modale");
 
-	// Contenu de la modale
-	modal.innerHTML = `
-        <div class="modale-contenu">
-            <span class="modale-fermer">&times;</span>
-            <h2>Gérer les projets</h2>
-            <div id="liste-projets">
-                <p>Chargement des projets...</p>
-            </div>
-        </div>
-    `;
-	// Ajout de la modale au body
+	// Créer l'overlay
+	const overlay = document.createElement("div");
+	overlay.classList.add("overlay");
+
+	//création du contenu de la modale
+	const modalContent = document.createElement("div");
+	modalContent.classList.add("modale-contenu");
+
+	//création de la croix fermeture
+	const closeButton = document.createElement("span");
+	closeButton.classList.add("modale-fermer");
+	closeButton.innerHTML = "&times;";
+	modalContent.appendChild(closeButton);
+
+	//titre
+
+	const title = document.createElement("h2");
+	title.textContent = "Galerie photo";
+	modalContent.appendChild(title);
+
+	//conteneur projets
+	const listeProjets = document.createElement("div");
+	listeProjets.id = "liste-projets";
+	modalContent.appendChild(listeProjets);
+
+	//bouton ajout photo
+	const ajouterBtn = document.createElement("button");
+	ajouterBtn.textContent = "Ajouter une photo";
+	ajouterBtn.addEventListener("click", () => {
+		ouvrirModale2("modale2");
+	});
+	modalContent.appendChild(ajouterBtn);
+
+	//ajout du de la modale au body
+	modal.appendChild(modalContent);
+
+	//ajout de la modale au body
+	document.body.appendChild(overlay);
 	document.body.appendChild(modal);
 
-	// Fermer la modale au clic sur la croix
-	document
-		.querySelector(".modale-fermer")
-		.addEventListener("click", fermerModale);
-	modalButton.addEventListener("click", ouvrirModale);
+	// fermer la modale au clic
+
+	closeButton.addEventListener("click", fermerModale);
+	overlay.addEventListener("click", fermerModale);
+	chargerGalerie();
 }
 
 function fermerModale() {
 	const modal = document.querySelector("#modal-projets");
+	const overlay = document.querySelector(".overlay");
 	if (modal) {
 		modal.remove(); // Supprime la modale du DOM
+	}
+	// Si l'overlay existe, on le supprime aussi
+	if (overlay) {
+		overlay.remove();
 	}
 }
 
@@ -237,3 +268,102 @@ document.addEventListener("DOMContentLoaded", () => {
 		ajouterEvenementModale(); // Ajoute l'événement au clic
 	}
 });
+
+// Fonction pour récupérer et afficher les projets
+function chargerGalerie() {
+	fetch(apiUrl)
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Erreur lors de la récupération des projets");
+			}
+			return response.json();
+		})
+		.then((data) => {
+			const galleryContainerModal =
+				document.querySelector("#liste-projets");
+
+			if (!galleryContainerModal) {
+				throw new Error(
+					"L'élément #liste-projets n'existe pas dans le DOM"
+				);
+			}
+
+			// Afficher les projets dans la modale
+			displayWorks(data);
+		})
+		.catch((error) => {
+			console.error("Erreur :", error);
+		});
+}
+
+// Fonction d'affichage des projets
+function displayWorks(works) {
+	const galleryContainerModal = document.querySelector("#liste-projets");
+	galleryContainerModal.innerHTML = ""; // On vide d'abord le conteneur
+
+	works.forEach((work) => {
+		const workElement = document.createElement("div");
+		workElement.classList.add("work");
+
+		const workImage = document.createElement("img");
+		workImage.src = work.imageUrl;
+
+		workElement.appendChild(workImage);
+
+		galleryContainerModal.appendChild(workElement);
+	});
+}
+
+function deleteWork(id) {
+	const token = localStorage.getItem("token");
+
+	fetch(`${apiUrl}/${id}`, {
+		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Échec de la suppression");
+			}
+			// Recharger la galerie après suppression
+			return fetch(apiUrl);
+		})
+		.then((res) => res.json())
+		.then((data) => {
+			displayDelete(data); // On recharge la modale avec les nouveaux éléments
+		})
+		.catch((error) => {
+			console.error("Erreur lors de la suppression :", error);
+		});
+}
+
+function displayDelete(works) {
+	const galleryContainerModal = document.querySelector(".liste-projets");
+	galleryContainerModal.innerHTML = ""; // Nettoyage de la modale
+
+	works.forEach((work) => {
+		const workElement = document.createElement("div");
+		workElement.classList.add("work");
+
+		const img = document.createElement("img");
+		img.src = work.imageUrl;
+		img.alt = work.title;
+
+		const deleteBtn = document.createElement("button");
+		deleteBtn.classList.add("delete-button");
+
+		const icon = document.createElement("i");
+		icon.classList.add("fas", "fa-trash-alt"); // ou juste "fa-trash"
+		deleteBtn.appendChild(icon);
+		// Quand on clique dessus, on supprime
+		deleteBtn.addEventListener("click", () => {
+			deleteWork(work.id);
+		});
+
+		workElement.appendChild(img);
+		workElement.appendChild(deleteBtn);
+		galleryContainerModal.appendChild(workElement);
+	});
+}

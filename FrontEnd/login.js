@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector("#login-form"); // Correction ici !
 
 	if (!form) {
-		console.error("Formulaire non trouvé !");
 		return;
 	}
 
