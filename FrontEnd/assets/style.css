@@ -492,13 +492,22 @@ button {
 	text-align: center;
 	position: relative;
 }
-.delete-button {
+
+.delete-Trash {
 	position: absolute;
-	top: 5px;
-	right: 5px;
-	background-color: transparent;
+	top: 3px;
+	right: 10px;
+	background-color: black;
+	color: white;
 	border: none;
+
+	width: 15px;
+	height: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	cursor: pointer;
-	font-size: 18px;
-	color: red;
+}
+.delete-Trash i {
+	font-size: 8px; /* Taille de l'icône (plus petite) */
 }
