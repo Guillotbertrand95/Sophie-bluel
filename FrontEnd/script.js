@@ -280,16 +280,37 @@ function chargerGalerie() {
 		.then((data) => {
 			const galleryContainerModal =
 				document.querySelector("#liste-projets");
+			const galleryContainer = document.querySelector(".gallery"); // la galerie principale
 
-			if (!galleryContainerModal) {
+			// ⚠️ Vérifier que les deux galeries existent
+			if (!galleryContainerModal || !galleryContainer) {
 				throw new Error(
-					"L'élément #liste-projets n'existe pas dans le DOM"
+					"Un des éléments de galerie n'existe pas dans le DOM"
 				);
 			}
 
-			console.log(data);
-			// Afficher les projets dans la modale
+			// 🔄 Vider les galeries avant de les re-remplir
+			galleryContainerModal.innerHTML = "";
+			galleryContainer.innerHTML = "";
+
+			// 🧽 Remplir la modale
 			displayDelete(data);
+
+			// 🖼️ Remplir la galerie principale
+			data.forEach((work) => {
+				const figure = document.createElement("figure");
+
+				const img = document.createElement("img");
+				img.src = work.imageUrl;
+				img.alt = work.title;
+
+				const caption = document.createElement("figcaption");
+				caption.textContent = work.title;
+
+				figure.appendChild(img);
+				figure.appendChild(caption);
+				galleryContainer.appendChild(figure);
+			});
 		})
 		.catch((error) => {
 			console.error("Erreur :", error);
@@ -360,11 +381,8 @@ function deleteWork(id) {
 			if (!response.ok) {
 				throw new Error("Échec de la suppression");
 			}
-			// Suppression réussie, retirer l'élément du DOM
-			const workElement = document.querySelector(`#work-${id}`);
-			if (workElement) {
-				workElement.remove();
-			}
+			// On recharge la galerie pour afficher la version à jour
+			chargerGalerie(); //  Appelle la fonction qui reconstruit la galerie
 		})
 		.catch((error) => {
 			console.error("Erreur lors de la suppression :", error);
@@ -427,6 +445,7 @@ function ouvrirModale2(modaleId) {
 	const submitBtn = document.createElement("button");
 	submitBtn.type = "submit";
 	submitBtn.textContent = "Ajouter le projet";
+	submitBtn.classList.add("btn-submit");
 
 	// Ajouter les champs au formulaire
 	form.appendChild(inputTitle);

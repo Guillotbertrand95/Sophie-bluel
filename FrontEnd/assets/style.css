@@ -285,7 +285,7 @@ label[for="password-forget"] {
 	height: 25px;
 	font-weight: #1d6154;
 	font-family: syne;
-	background: white;
+
 	border: 1px solid black;
 	margin: 5px; /* Espacement entre les boutons */
 	cursor: pointer;
@@ -456,7 +456,7 @@ h2 {
 }
 
 /* Style pour le bouton "Ajouter une photo" */
-button {
+.btn-submit {
 	width: 70%;
 	margin-left: 65px;
 
