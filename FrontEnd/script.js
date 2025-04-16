@@ -8,6 +8,7 @@ fetch(apiUrl)
 		return response.json();
 	})
 	.then((data) => {
+		console.log("Données reçues depuis l'API :", data);
 		// Sélection des conteneurs
 		const galleryContainer = document.querySelector(".gallery");
 		const filterContainer = document.querySelector(".filters");
@@ -19,23 +20,42 @@ fetch(apiUrl)
 		}
 
 		//  EXTRAIRE LES CATÉGORIES UNIQUES AVEC SET
-		const categoryIds = new Set(data.map((work) => work.category.id)); // Un set des IDs uniques
-		const categories = [{ id: "all", name: "Tous" }];
+		// 1. Récupération des catégories uniques (sans "Tous")
+		const categoryIds = new Set(data.map((work) => work.category.id));
+		let categories = [];
 
-		// On récupère les noms correspondants
 		categoryIds.forEach((id) => {
 			const category = data.find(
 				(work) => work.category.id === id
 			).category;
-			categories.push(category);
+			if (!categories.some((c) => c.id === category.id)) {
+				categories.push(category);
+			}
 		});
+
+		// 2. Tri personnalisé
+		const ordreSouhaite = [
+			"Objets",
+
+			"Appartements",
+			"Hotels & restaurants",
+		];
+
+		categories.sort((a, b) => {
+			return (
+				ordreSouhaite.indexOf(a.name) - ordreSouhaite.indexOf(b.name)
+			);
+		});
+
+		// 3. Ajout de "Tous" en premier
+		categories.unshift({ id: "all", name: "Tous" });
 
 		//  CRÉER LES BOUTONS DE FILTRE
 		categories.forEach((category) => {
 			const button = document.createElement("button");
 			button.textContent = category.name;
 			button.dataset.categoryId = category.id;
-			button.classList.add("filter-button");
+			button.classList.add("filter-btn");
 
 			button.addEventListener("click", () => {
 				//   FILTRER LES PROJETS AU CLIC
@@ -223,11 +243,13 @@ function contenuModale() {
 	//conteneur projets
 	const listeProjets = document.createElement("div");
 	listeProjets.id = "liste-projets";
+
 	modalContent.appendChild(listeProjets);
 
 	//bouton ajout photo
 	const ajouterBtn = document.createElement("button");
 	ajouterBtn.textContent = "Ajouter une photo";
+	ajouterBtn.classList.add("add-picture");
 	ajouterBtn.addEventListener("click", () => {
 		ouvrirModale2("modale2");
 	});
@@ -282,21 +304,21 @@ function chargerGalerie() {
 				document.querySelector("#liste-projets");
 			const galleryContainer = document.querySelector(".gallery"); // la galerie principale
 
-			// ⚠️ Vérifier que les deux galeries existent
+			//  Vérifier que les deux galeries existent
 			if (!galleryContainerModal || !galleryContainer) {
 				throw new Error(
 					"Un des éléments de galerie n'existe pas dans le DOM"
 				);
 			}
 
-			// 🔄 Vider les galeries avant de les re-remplir
+			//  Vider les galeries avant de les re-remplir
 			galleryContainerModal.innerHTML = "";
 			galleryContainer.innerHTML = "";
 
-			// 🧽 Remplir la modale
+			//  Remplir la modale
 			displayDelete(data);
 
-			// 🖼️ Remplir la galerie principale
+			//  Remplir la galerie principale
 			data.forEach((work) => {
 				const figure = document.createElement("figure");
 
@@ -398,13 +420,35 @@ function ouvrirModale2(modaleId) {
 	modal2.id = modaleId;
 	modal2.classList.add("modale");
 
-	// Créer l'overlay
-	const overlay = document.createElement("div");
-	overlay.classList.add("overlay");
-
 	// Contenu de la modale d'ajout
 	const modalContent = document.createElement("div");
 	modalContent.classList.add("modale-contenu");
+
+	// Réutiliser l'overlay existant
+	const overlay = document.querySelector(".overlay");
+
+	// Créer le bouton
+	const boutonRetour = document.createElement("button");
+
+	// Créer l'icône Font Awesome
+	const iconeRetour = document.createElement("i");
+	iconeRetour.classList.add("fa-solid", "fa-arrow-left");
+
+	// Ajouter l'icône dans le bouton
+	boutonRetour.appendChild(iconeRetour);
+
+	// Ajouter une classe CSS et du style si besoin
+	boutonRetour.classList.add("retour-btn");
+	boutonRetour.style.marginTop = "20px";
+
+	// Gérer l'événement de retour
+	boutonRetour.addEventListener("click", () => {
+		document.body.removeChild(modal2);
+		chargerGalerie();
+	});
+
+	// Ajouter le bouton à ta modale
+	modal2.appendChild(boutonRetour);
 
 	// Créer la croix de fermeture
 	const closeButton = document.createElement("span");
@@ -414,7 +458,7 @@ function ouvrirModale2(modaleId) {
 
 	// Titre de la modale
 	const title = document.createElement("h2");
-	title.textContent = "Ajouter un nouveau projet";
+	title.textContent = "Ajout photo";
 	modalContent.appendChild(title);
 
 	// Formulaire d'ajout d'image et d'autres informations
@@ -448,6 +492,7 @@ function ouvrirModale2(modaleId) {
 	submitBtn.classList.add("btn-submit");
 
 	// Ajouter les champs au formulaire
+
 	form.appendChild(inputTitle);
 	form.appendChild(inputCategory);
 	form.appendChild(inputImage);
@@ -460,7 +505,7 @@ function ouvrirModale2(modaleId) {
 	modal2.appendChild(modalContent);
 
 	// Ajouter l'overlay et la modale au body
-	document.body.appendChild(overlay);
+
 	document.body.appendChild(modal2);
 
 	// Fermer la modale au clic sur la croix ou l'overlay
@@ -474,19 +519,7 @@ function ouvrirModale2(modaleId) {
 		const categoryValue = inputCategory.value;
 		const imageFile = inputImage.files[0];
 
-		const form = document.querySelector("#uploadForm");
-		if (form) {
-			form.addEventListener("submit", (e) => {
-				e.preventDefault();
-				const titleValue = inputTitle.value;
-				const categoryValue = inputCategory.value;
-				const imageFile = inputImage.files[0];
-
-				ajouterProjet(titleValue, categoryValue, imageFile);
-			});
-		}
-
-		ajouterProjet(titleValue, categoryValue, imageFile);
+		ajouterProjet(titleValue, categoryValue, imageFile, form);
 	});
 }
 
@@ -503,7 +536,7 @@ function fermerModale2(modaleId) {
 }
 
 // Fonction pour ajouter un projet
-function ajouterProjet(title, category, imageFile) {
+function ajouterProjet(title, category, imageFile, form) {
 	const formData = new FormData();
 	formData.append("title", title);
 	formData.append("category", category);
@@ -530,31 +563,9 @@ function ajouterProjet(title, category, imageFile) {
 			// Après ajout, mettre à jour la galerie
 			chargerGalerie();
 			// Fermer la modale
-			fermerModale2("modale2");
+			form.reset(); //  Réinitialise les champs
 		})
 		.catch((error) => {
 			console.error("Erreur :", error);
 		});
 }
-document
-	.getElementById("uploadForm")
-	.addEventListener("submit", function (event) {
-		event.preventDefault();
-
-		const formData = new FormData();
-		formData.append("title", document.getElementById("title").value);
-		formData.append("category", document.getElementById("category").value);
-		formData.append("image", document.getElementById("image").files[0]);
-
-		fetch("http://localhost:5678/api/works", {
-			method: "POST",
-			body: formData,
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Success:", data);
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-			});
-	});
