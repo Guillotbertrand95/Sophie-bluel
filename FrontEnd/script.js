@@ -461,44 +461,90 @@ function ouvrirModale2(modaleId) {
 	title.textContent = "Ajout photo";
 	modalContent.appendChild(title);
 
-	// Formulaire d'ajout d'image et d'autres informations
+	// Création du formulaire
 	const form = document.createElement("form");
-	form.id = "uploadForm"; // Ajout de l'ID au formulaire
-	// Titre du projet
-	const inputTitle = document.createElement("input");
-	inputTitle.type = "text";
-	inputTitle.placeholder = "Titre du projet";
-	inputTitle.name = "title";
-	inputTitle.required = true;
+	form.id = "uploadForm";
 
-	// Catégorie du projet
-	const inputCategory = document.createElement("input");
-	inputCategory.type = "text";
-	inputCategory.placeholder = "Catégorie du projet";
-	inputCategory.name = "category";
-	inputCategory.required = true;
+	// === Partie upload image personnalisée ===
+	const imageWrapper = document.createElement("div");
+	imageWrapper.classList.add("image-upload-wrapper");
 
-	// Sélectionner une image
+	const imageIcon = document.createElement("i");
+	imageIcon.classList.add("fa-regular", "fa-image", "upload-icon");
+
+	const infoText = document.createElement("p");
+	infoText.textContent = "jpg, png - 4Mo max";
+	infoText.classList.add("format-info");
+
 	const inputImage = document.createElement("input");
 	inputImage.type = "file";
 	inputImage.accept = "image/*";
 	inputImage.name = "image";
 	inputImage.required = true;
+	inputImage.style.display = "none";
 
-	// Bouton de soumission
+	const uploadBtn = document.createElement("button");
+	uploadBtn.type = "button";
+	uploadBtn.textContent = "+ Ajouter photo";
+	uploadBtn.classList.add("btn-upload");
+
+	const imagePreview = document.createElement("img");
+	imagePreview.classList.add("image-preview");
+	imagePreview.style.display = "none";
+
+	// Events
+	uploadBtn.addEventListener("click", () => {
+		inputImage.click();
+	});
+
+	inputImage.addEventListener("change", (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				imagePreview.src = e.target.result;
+				imagePreview.style.display = "block";
+				imageIcon.style.display = "none";
+			};
+			reader.readAsDataURL(file);
+		}
+	});
+
+	// Assemble les éléments image
+	imageWrapper.appendChild(imageIcon);
+	imageWrapper.appendChild(uploadBtn);
+	imageWrapper.appendChild(infoText);
+	imageWrapper.appendChild(imagePreview);
+	imageWrapper.appendChild(inputImage);
+
+	// === Partie titre et catégorie ===
+	const inputTitle = document.createElement("input");
+	inputTitle.type = "text";
+	inputTitle.placeholder = "Titre du projet";
+	inputTitle.name = "title";
+	inputTitle.required = true;
+	inputTitle.classList.add("input-title");
+
+	const inputCategory = document.createElement("input");
+	inputCategory.type = "text";
+	inputCategory.placeholder = "Catégorie du projet";
+	inputCategory.name = "category";
+	inputCategory.required = true;
+	inputCategory.classList.add("input-category");
+
+	// Bouton soumission
 	const submitBtn = document.createElement("button");
 	submitBtn.type = "submit";
 	submitBtn.textContent = "Ajouter le projet";
 	submitBtn.classList.add("btn-submit");
 
-	// Ajouter les champs au formulaire
-
+	// Ajout au formulaire
+	form.appendChild(imageWrapper);
 	form.appendChild(inputTitle);
 	form.appendChild(inputCategory);
-	form.appendChild(inputImage);
 	form.appendChild(submitBtn);
 
-	// Ajouter le formulaire au contenu de la modale
+	// Ajout au contenu de la modale
 	modalContent.appendChild(form);
 
 	// Ajouter le contenu à la modale
