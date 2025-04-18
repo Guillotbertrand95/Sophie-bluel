@@ -255,7 +255,6 @@ function contenuModale() {
 	});
 	modalContent.appendChild(ajouterBtn);
 
-	//ajout du de la modale au body
 	modal.appendChild(modalContent);
 
 	//ajout de la modale au body
@@ -477,6 +476,7 @@ function ouvrirModale2(modaleId) {
 	infoText.classList.add("format-info");
 
 	const inputImage = document.createElement("input");
+
 	inputImage.type = "file";
 	inputImage.accept = "image/*";
 	inputImage.name = "image";
@@ -505,6 +505,8 @@ function ouvrirModale2(modaleId) {
 				imagePreview.src = e.target.result;
 				imagePreview.style.display = "block";
 				imageIcon.style.display = "none";
+				infoText.style.display = "none";
+				uploadBtn.style.display = "none";
 			};
 			reader.readAsDataURL(file);
 		}
@@ -520,17 +522,40 @@ function ouvrirModale2(modaleId) {
 	// === Partie titre et catégorie ===
 	const inputTitle = document.createElement("input");
 	inputTitle.type = "text";
-	inputTitle.placeholder = "Titre du projet";
+	inputTitle.placeholder = "";
 	inputTitle.name = "title";
 	inputTitle.required = true;
 	inputTitle.classList.add("input-title");
 
-	const inputCategory = document.createElement("input");
-	inputCategory.type = "text";
-	inputCategory.placeholder = "Catégorie du projet";
-	inputCategory.name = "category";
-	inputCategory.required = true;
-	inputCategory.classList.add("input-category");
+	const selectCategory = document.createElement("select");
+	selectCategory.name = "category";
+	selectCategory.required = true;
+	selectCategory.classList.add("input-category");
+
+	//tableau des catégories
+
+	const categories = [
+		{ id: 1, name: "Objets" },
+		{ id: 2, name: "Appartements" },
+		{ id: 3, name: "Hotels & restaurants" },
+	];
+
+	const defaultOption = document.createElement("option");
+	defaultOption.value = ""; // valeur vide = non valide si "required"
+	defaultOption.textContent = "";
+	defaultOption.disabled = true;
+	defaultOption.selected = true;
+
+	selectCategory.appendChild(defaultOption);
+
+	//création des options dynamiquement:
+	categories.forEach((category) => {
+		const option = document.createElement("option");
+		option.value = category.id; // valeur envoyé au back
+		option.textContent = category.name; // nom de la catégorie
+
+		selectCategory.appendChild(option);
+	});
 
 	// Bouton soumission
 	const submitBtn = document.createElement("button");
@@ -541,7 +566,7 @@ function ouvrirModale2(modaleId) {
 	// Ajout au formulaire
 	form.appendChild(imageWrapper);
 	form.appendChild(inputTitle);
-	form.appendChild(inputCategory);
+	form.appendChild(selectCategory);
 	form.appendChild(submitBtn);
 
 	// Ajout au contenu de la modale
@@ -562,11 +587,20 @@ function ouvrirModale2(modaleId) {
 	form.addEventListener("submit", (e) => {
 		e.preventDefault();
 		const titleValue = inputTitle.value;
-		const categoryValue = inputCategory.value;
+		const categoryValue = selectCategory.value;
 		const imageFile = inputImage.files[0];
 
 		ajouterProjet(titleValue, categoryValue, imageFile, form);
 	});
+}
+
+function resetImageUpload() {
+	imagePreview.src = "";
+	imagePreview.style.display = "none";
+	imageIcon.style.display = "block";
+	infoText.style.display = "block";
+	uploadBtn.style.display = "inline-block";
+	inputImage.value = ""; // vide le champ input file
 }
 
 // Fonction pour fermer la modale
@@ -610,6 +644,7 @@ function ajouterProjet(title, category, imageFile, form) {
 			chargerGalerie();
 			// Fermer la modale
 			form.reset(); //  Réinitialise les champs
+			resetImageUpload();
 		})
 		.catch((error) => {
 			console.error("Erreur :", error);
