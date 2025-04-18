@@ -213,7 +213,7 @@ function ajouterEvenementModale() {
 }
 function contenuModale() {
 	//vérifier si la modale existe déjà
-	if (document.querySelector("#modale-projets")) return;
+	if (document.querySelector("#modal-projets")) return;
 
 	// création de l'éléments principal modale
 	const modal = document.createElement("div");
@@ -246,7 +246,11 @@ function contenuModale() {
 
 	modalContent.appendChild(listeProjets);
 
+	const ligneDiv = document.createElement("div");
+	ligneDiv.classList.add("ligne-separation");
+	modalContent.appendChild(ligneDiv);
 	//bouton ajout photo
+
 	const ajouterBtn = document.createElement("button");
 	ajouterBtn.textContent = "Ajouter une photo";
 	ajouterBtn.classList.add("add-picture");
@@ -258,6 +262,7 @@ function contenuModale() {
 	modal.appendChild(modalContent);
 
 	//ajout de la modale au body
+
 	document.body.appendChild(overlay);
 	document.body.appendChild(modal);
 
@@ -519,16 +524,29 @@ function ouvrirModale2(modaleId) {
 	imageWrapper.appendChild(imagePreview);
 	imageWrapper.appendChild(inputImage);
 
+	// Créer les labels
+	const labelTitle = document.createElement("label");
+	labelTitle.textContent = "Titre";
+	labelTitle.setAttribute("for", "title");
+
+	const labelCategory = document.createElement("label");
+	labelCategory.textContent = "Catégorie";
+	labelCategory.setAttribute("for", "category");
+
 	// === Partie titre et catégorie ===
 	const inputTitle = document.createElement("input");
 	inputTitle.type = "text";
+
 	inputTitle.placeholder = "";
 	inputTitle.name = "title";
+	inputTitle.id = "title"; // important pour associer le label !
 	inputTitle.required = true;
 	inputTitle.classList.add("input-title");
 
 	const selectCategory = document.createElement("select");
+
 	selectCategory.name = "category";
+	selectCategory.id = "category"; // important aussi !
 	selectCategory.required = true;
 	selectCategory.classList.add("input-category");
 
@@ -556,17 +574,21 @@ function ouvrirModale2(modaleId) {
 
 		selectCategory.appendChild(option);
 	});
-
+	const ligneDiv = document.createElement("div");
+	ligneDiv.classList.add("ligne-separation");
 	// Bouton soumission
 	const submitBtn = document.createElement("button");
 	submitBtn.type = "submit";
-	submitBtn.textContent = "Ajouter le projet";
-	submitBtn.classList.add("btn-submit");
+	submitBtn.textContent = "Validé";
+	submitBtn.classList.add("btn-submitV");
 
 	// Ajout au formulaire
 	form.appendChild(imageWrapper);
+	form.appendChild(labelTitle);
 	form.appendChild(inputTitle);
+	form.appendChild(labelCategory);
 	form.appendChild(selectCategory);
+	form.appendChild(ligneDiv);
 	form.appendChild(submitBtn);
 
 	// Ajout au contenu de la modale
@@ -592,15 +614,6 @@ function ouvrirModale2(modaleId) {
 
 		ajouterProjet(titleValue, categoryValue, imageFile, form);
 	});
-}
-
-function resetImageUpload() {
-	imagePreview.src = "";
-	imagePreview.style.display = "none";
-	imageIcon.style.display = "block";
-	infoText.style.display = "block";
-	uploadBtn.style.display = "inline-block";
-	inputImage.value = ""; // vide le champ input file
 }
 
 // Fonction pour fermer la modale
@@ -644,7 +657,6 @@ function ajouterProjet(title, category, imageFile, form) {
 			chargerGalerie();
 			// Fermer la modale
 			form.reset(); //  Réinitialise les champs
-			resetImageUpload();
 		})
 		.catch((error) => {
 			console.error("Erreur :", error);

@@ -432,7 +432,7 @@ h2 {
 .modale-contenu {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 10px;
 }
 
 /* Style pour la croix de fermeture */
@@ -453,7 +453,7 @@ h2 {
 	margin: 0;
 	color: black;
 	text-align: center;
-	margin-top: 50px;
+	margin-bottom: 40px;
 }
 
 /* Style pour le conteneur de la liste des projets */
@@ -479,7 +479,7 @@ h2 {
 /* Style pour le bouton "Ajouter une photo" */
 .btn-submit {
 	width: 70%;
-
+	font-family: syne;
 	background-color: #1d6154;
 	color: white;
 	border: none;
@@ -544,8 +544,9 @@ h2 {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 20px;
+	gap: 15px;
 }
+
 .image-upload-wrapper {
 	display: flex;
 
@@ -566,13 +567,13 @@ h2 {
 
 .btn-upload {
 	font-family: work sans;
-	color: #306685;
+	color: #cbd6dc;
 	width: 70%;
 	padding: 9px;
 	margin-top: 10px;
 
-	background-color: #888;
-	color: white;
+	background-color: #cbd6dc;
+	color: #306685;
 	align-items: center;
 	border: none;
 	border-radius: 60px;
@@ -594,7 +595,7 @@ h2 {
 
 .upload-icon {
 	font-size: 44px;
-	color: #555;
+	color: #b9c5cc;
 	margin-left: 38px;
 }
 
@@ -608,8 +609,9 @@ h2 {
 .input-title {
 	font-family: "work sans";
 	padding: 10px 55px;
+	margin-top: 5px;
 	color: #444444;
-	font-size: 14px;
+	font-size: 12px;
 	border: none;
 	text-align: center;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -625,8 +627,8 @@ h2 {
 .input-category {
 	display: block;
 	background-color: #fff;
-	color: #444444;
-	font-size: 14px;
+	margin-top: 5px;
+	font-size: 12px;
 	font-family: "work sans";
 	text-align: center;
 	padding: 10px 55px;
@@ -638,4 +640,21 @@ h2 {
 
 .input-category option:hover {
 	background-color: transparent !important; /* évite le fond bleu de survol */
+}
+.ligne-separation {
+	width: 100%; /* Prend toute la largeur de la modale */
+	height: 1px; /* Hauteur de la ligne */
+	background-color: #ccc; /* Couleur de la ligne */
+	margin: 10px 0; /* Espacement autour de la ligne */
+}
+.btn-submitV {
+	width: 70%;
+	font-family: syne;
+	background-color: #a7a7a7;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
