@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const form = document.querySelector("#login-form"); // Correction ici !
+	const form = document.querySelector("#login-form");
 
 	if (!form) {
 		return;
@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		const email = document.querySelector("#email").value;
 		const password = document.querySelector("#password").value;
+
+		// Affichage des valeurs dans la console
+		console.log("email:", email);
+		console.log("password:", password);
 
 		try {
 			const response = await fetch(

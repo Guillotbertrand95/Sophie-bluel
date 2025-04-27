@@ -498,7 +498,6 @@ h2 {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Conteneur des projets dans la modale */
 #modal-projets #liste-projets {
 	display: flex;
 	flex-wrap: wrap;
@@ -529,11 +528,11 @@ h2 {
 	cursor: pointer;
 }
 .delete-Trash i {
-	font-size: 8px; /* Taille de l'icône (plus petite) */
+	font-size: 8px;
 }
 .retour-btn {
 	position: absolute;
-	top: 0px; /* distance depuis le haut */
+	top: 0px;
 	left: 10px;
 	border: none;
 	background-color: white;
@@ -639,13 +638,13 @@ h2 {
 }
 
 .input-category option:hover {
-	background-color: transparent !important; /* évite le fond bleu de survol */
+	background-color: transparent;
 }
 .ligne-separation {
-	width: 100%; /* Prend toute la largeur de la modale */
-	height: 1px; /* Hauteur de la ligne */
-	background-color: #ccc; /* Couleur de la ligne */
-	margin: 10px 0; /* Espacement autour de la ligne */
+	width: 100%;
+	height: 1px;
+	background-color: #ccc;
+	margin: 10px 0;
 }
 .btn-submitV {
 	width: 70%;
