@@ -581,7 +581,9 @@ function ouvrirModale2(modaleId) {
 	submitBtn.type = "submit";
 	submitBtn.textContent = "Validé";
 	submitBtn.classList.add("btn-submitV");
-
+	function documentAjouteAvecSucces() {
+		submitBtn.classList.add("success");
+	}
 	// Ajout au formulaire
 	form.appendChild(imageWrapper);
 	form.appendChild(labelTitle);
@@ -613,6 +615,7 @@ function ouvrirModale2(modaleId) {
 		const imageFile = inputImage.files[0];
 
 		ajouterProjet(titleValue, categoryValue, imageFile, form);
+		documentAjouteAvecSucces();
 	});
 }
 
@@ -656,6 +659,7 @@ function ajouterProjet(title, category, imageFile, form) {
 			// Après ajout, mettre à jour la galerie
 			chargerGalerie();
 			// Fermer la modale
+
 			form.reset(); //  Réinitialise les champs
 		})
 		.catch((error) => {
